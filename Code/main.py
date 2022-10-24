@@ -1,3 +1,4 @@
+from numpy import number
 from MyImage_class import *
 from RainSnowDetector_class import *
 from RainSnowRemoval_class import *
@@ -8,16 +9,17 @@ import time
 from scipy import stats
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.decomposition import PCA
-
+print("Import complete")
 
 def main():
     # ------ Settings:
-    path_dataset = './input_images/'
+    path_dataset = 'D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/input_images/'
     imagesType = 'jpg'
     # ------ iteration on all images of dataset:
     images_address = path_dataset + '*.' + imagesType
     list_of_image_addresses = glob.glob(images_address)
     number_of_images_in_dataset = len(list_of_image_addresses)
+    print(f"test: {number_of_images_in_dataset}")
     for image_index in range(number_of_images_in_dataset):
         # ------ https://stackoverflow.com/questions/678236/how-to-get-the-filename-without-the-extension-from-a-path-in-python
         address_of_image = list_of_image_addresses[image_index]
@@ -27,52 +29,54 @@ def main():
         # ------ read image:
         image = Image.open(address_of_image)
         # ------ calling weather module:
-        weather_module(image=image, image_name=image_name_pure, path_saving_enhanced_dataset='./exnhanced_dataset/', format_of_save=imagesType, path_saving_condition='./condition_of_images/')
+        print("removing haze")
+        print(f"Debug: {image_name_pure}")
+        weather_module(image=image, image_name=image_name_pure, path_saving_enhanced_dataset='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/exnhanced_dataset/', format_of_save=imagesType, path_saving_condition='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/condition_of_images/')
 
 # ------ Weather Module:
-def weather_module(image, image_name, path_saving_enhanced_dataset='./exnhanced_dataset/', format_of_save='jpg', path_saving_condition='./condition_of_images/'):
+def weather_module(image, image_name, path_saving_enhanced_dataset='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/exnhanced_dataset/', format_of_save='jpg', path_saving_condition='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/condition_of_images/'):
     # ------ instantiate MyImage class:
-    myImage = MyImage(_image_type='jpg', _path='./')
+    myImage = MyImage(_image_type='jpg', _path='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/')
     # ------ paths of savings:
-    path_intermediate_files = './intermediate_saved_files/'
+    path_intermediate_files = 'D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/intermediate_saved_files/'
     path_haze_detection = path_intermediate_files + 'haze_detection/'
     path_rain_detection = path_intermediate_files + 'rain_detection/'
     path_haze_removal = path_intermediate_files + 'haze_removal/'
     path_save_condition = path_saving_condition + 'conditions_of_images.txt'
     # ------ load trained files:
-    # -> haze detection files:
-    e_vecs = myImage.load_file(filename='e_vecs', path_folder=path_haze_detection+'saved_train_files/')
-    projected_training_data = myImage.load_file(filename='projected_training_data', path_folder=path_haze_detection+'saved_train_files/')
-    # -> rain detection files:
-    lda = myImage.load_file(filename='lda', path_folder=path_rain_detection+'saved_train_files/')
-    pca = myImage.load_file(filename='pca', path_folder=path_rain_detection+'saved_train_files/')
-    # ------ detect luminance:
-    print('luminance amount estimation...')
-    light_factor = detect_light_condition(image=image, myImage_object=myImage)
-    # ------ detect haze:
-    print('haze amount estimation...')
-    haze_factor, estimated_classes_of_boxes_HAZE = Detect_Haze(image=image, myImage_object=myImage, projected_training_data=projected_training_data, e_vecs=e_vecs, path_haze_detection=path_haze_detection)
-    # ------ detect rain:
-    print('rain amount estimation...')
-    rain_factor, estimated_classes_of_boxes_RAIN = Detect_Rain(image=image, myImage_object=myImage, lda=lda, pca=pca, path_rain_detection=path_rain_detection, save_intermediate_images=False)
-    # ------ luminance enhancement (if necessary):
-    print('luminance enhancement (if necessary)...')
-    is_luminance_enhanced, image = enhance_luminance(image=image, myImage_object=myImage)
-    # ------ haze removal (if necessary):
-    print('haze enhancement (if necessary)...')
-    if not (light_factor == 5):   #--> if it not night
-        if haze_factor == 4 or haze_factor == 5:
-            image = Remove_Haze(image=image, myImage_object=myImage, patch_size=3, save_intermediate_images=False, path_haze_removal=path_haze_removal)
-            is_haze_removed = True
-        else:
-            is_haze_removed = False
-    else:
-        is_haze_removed = False
-    # ------ save the condition of image in text file:
-    line_to_store = str(light_factor) + '\t' + str(haze_factor) + '\t' + str(rain_factor) + '\t' + str(is_luminance_enhanced) + '\t' + str(is_haze_removed)
+    # # -> haze detection files:
+    # e_vecs = myImage.load_file(filename='e_vecs', path_folder=path_haze_detection+'saved_train_files/')
+    # projected_training_data = myImage.load_file(filename='projected_training_data', path_folder=path_haze_detection+'saved_train_files/')
+    # # -> rain detection files:
+    # lda = myImage.load_file(filename='lda', path_folder=path_rain_detection+'saved_train_files/')
+    # pca = myImage.load_file(filename='pca', path_folder=path_rain_detection+'saved_train_files/')
+    # # ------ detect luminance:
+    # print('luminance amount estimation...')
+    # light_factor = detect_light_condition(image=image, myImage_object=myImage)
+    # # ------ detect haze:
+    # print('haze amount estimation...')
+    # haze_factor, estimated_classes_of_boxes_HAZE = Detect_Haze(image=image, myImage_object=myImage, projected_training_data=projected_training_data, e_vecs=e_vecs, path_haze_detection=path_haze_detection)
+    # # ------ detect rain:
+    # print('rain amount estimation...')
+    # rain_factor, estimated_classes_of_boxes_RAIN = Detect_Rain(image=image, myImage_object=myImage, lda=lda, pca=pca, path_rain_detection=path_rain_detection, save_intermediate_images=False)
+    # # ------ luminance enhancement (if necessary):
+    # print('luminance enhancement (if necessary)...')
+    # is_luminance_enhanced, image = enhance_luminance(image=image, myImage_object=myImage)
+    # # ------ haze removal (if necessary):
+    # print('haze enhancement (if necessary)...')
+    # if not (light_factor == 5):   #--> if it not night
+    #     if haze_factor == 4 or haze_factor == 5:
+    image = Remove_Haze(image=image, myImage_object=myImage, patch_size=3, save_intermediate_images=False, path_haze_removal=path_haze_removal)
+    is_haze_removed = True
+    #     else:
+    #         is_haze_removed = False
+    # else:
+    #     is_haze_removed = False
+    # # ------ save the condition of image in text file:
+    # line_to_store = str(light_factor) + '\t' + str(haze_factor) + '\t' + str(rain_factor) + '\t' + str(is_luminance_enhanced) + '\t' + str(is_haze_removed)
     if not os.path.exists(path_saving_condition):  #--> if the folder does not exist, create it
         os.makedirs(path_saving_condition)
-    myImage.store_sth_in_text_file(sth_in_a_line=line_to_store, path_of_test_file=path_save_condition, overwrite_file_if_already_exists=False)
+    # myImage.store_sth_in_text_file(sth_in_a_line=line_to_store, path_of_test_file=path_save_condition, overwrite_file_if_already_exists=False)
     # ------ save the [recovered] image:
     print('saving results...')
     myImage.save_image(image=image, name=image_name, save_path=path_saving_enhanced_dataset, format_of_save=format_of_save)
@@ -217,7 +221,7 @@ def Detect_Haze(image, myImage_object, projected_training_data, e_vecs, path_haz
     # ------ returns:
     return haze_factor, estimated_classes_of_boxes
 
-def Remove_Haze(image, myImage_object, patch_size=15, save_intermediate_images=False, path_haze_removal='./'):
+def Remove_Haze(image, myImage_object, patch_size=15, save_intermediate_images=False, path_haze_removal='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/'):
     # ------ instantiate class:
     hazeRemoval = HazeRemoval()
     # ------ extract dark channel:
@@ -241,7 +245,7 @@ def Remove_Haze(image, myImage_object, patch_size=15, save_intermediate_images=F
     # ------ save results:
     return recovered_image
 
-def Remove_RainSnow(image, image_index, myImage_object, vertical_edge_map, vertical_opposite_edge_map, save_intermediate_images=False, path_RainSnow_removed='./'):
+def Remove_RainSnow(image, image_index, myImage_object, vertical_edge_map, vertical_opposite_edge_map, save_intermediate_images=False, path_RainSnow_removed='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/'):
     # ------ instantiate class:
     rainSnowRemoval = RainSnowRemoval()
     # ------ Recover image (phase 1):
@@ -261,7 +265,7 @@ def Remove_RainSnow(image, image_index, myImage_object, vertical_edge_map, verti
     if save_intermediate_images:
         myImage_object.save_image(image=recovered_image3, name='recovered'+str(image_index), save_path=path_RainSnow_removed, format_of_save='jpg')
 
-def Train_rain_condition(myImage_object, save_intermediate_images=False, path_dataset_train='./', path_dataset_train_rainy='./', path_dataset_train_not_rainy='./', find_edge_map_again=True):
+def Train_rain_condition(myImage_object, save_intermediate_images=False, path_dataset_train='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/', path_dataset_train_rainy='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/', path_dataset_train_not_rainy='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/', find_edge_map_again=True):
     rainSnowDetector = RainSnowDetector()  # ------ instantiate class
     path_dataset_train_backup = path_dataset_train
     size_of_box = 100
@@ -297,7 +301,7 @@ def Train_rain_condition(myImage_object, save_intermediate_images=False, path_da
                     myImage_object.save_image(image=vertical_opposite_edge_map_showable, name='edge_map'+str(image_index)+'_opposite', save_path=path_vertical_edge_map, format_of_save='jpg')
                 # ----- divide image into several boxes, and then save the boxes:
                 path_boxes = path_dataset_train + 'boxes/'
-                if image_index is 0:
+                if image_index == 0:
                     myImage_object.remove_folder(folder_path=path_boxes)
                 rainSnowDetector.divide_image_into_boxes(vertical_edge_map=vertical_edge_map, myImage_object=myImage_object, size_of_box=size_of_box, save_path=path_boxes, format_of_save='jpg')
         # ------ extract features:

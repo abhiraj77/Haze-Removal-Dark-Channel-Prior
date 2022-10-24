@@ -44,7 +44,7 @@ class MyImage:
         # undecorate
         return [ i[1] for i in tmp ]
 
-    def numbering_images(self, folder_path=None, format_of_save='jpg', folder_path_save='./'):
+    def numbering_images(self, folder_path=None, format_of_save='jpg', folder_path_save='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/'):
         """ Numbering images cleanly starting from 0 """
         self.image_list = []
         if folder_path is None:
@@ -102,7 +102,7 @@ class MyImage:
             gray_image = self.pilImage2numpyArray(img=gray_image)
             return gray_image
 
-    def rgb2gray_allImages(self, save_path='./', format_of_save='jpg'):
+    def rgb2gray_allImages(self, save_path='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/', format_of_save='jpg'):
         counter = 0
         for filename in glob.glob(self.images_address):
             im = Image.open(filename)
@@ -110,7 +110,7 @@ class MyImage:
             counter += 1
             self.save_image(image=gray_image, name=str(counter), save_path=save_path, format_of_save='jpg')
 
-    def save_image(self, image, name='temp', save_path='./', format_of_save='jpg'):
+    def save_image(self, image, name='temp', save_path='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/', format_of_save='jpg'):
         if not os.path.exists(save_path):  # https://stackoverflow.com/questions/273192/how-can-i-create-a-directory-if-it-does-not-exist
             os.makedirs(save_path)
         is_image_in_pil_format = isinstance(image,Image.Image)
@@ -123,7 +123,7 @@ class MyImage:
         except Exception as e:
             print(e)
 
-    def save_plot(self, figure, name='temp', save_path='./', format_of_save='jpg'):
+    def save_plot(self, figure, name='temp', save_path='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/', format_of_save='jpg'):
         # do these before calling this function:
         # 1- fig = plt.figure()
         # 2- plt.plot(...) or plt.hist(...) or plt.scatter(...) or ...
@@ -299,7 +299,7 @@ class MyImage:
             G_total[G_total < threshold] = 0; G_total[G_total >= threshold] = 1
         return G_total, G_x_applied, G_y_applied, phase_sobel, G_x_opposite_applied, G_y_opposite_applied
 
-    def count_number_of_files_in_folder(self, folder_path='./'):
+    def count_number_of_files_in_folder(self, folder_path='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/'):
         if not os.path.exists(folder_path):  # https://stackoverflow.com/questions/273192/how-can-i-create-a-directory-if-it-does-not-exist
             return 0
         # https://stackoverflow.com/questions/2632205/how-to-count-the-number-of-files-in-a-directory-using-python
@@ -375,7 +375,7 @@ class MyImage:
         # https://stackoverflow.com/questions/303200/how-do-i-remove-delete-a-folder-that-is-not-empty-with-python
         shutil.rmtree(folder_path, ignore_errors=True)
 
-    def store_sth_in_text_file(self, sth_in_a_line='something...', path_of_test_file='./text.txt', overwrite_file_if_already_exists=False):
+    def store_sth_in_text_file(self, sth_in_a_line='something...', path_of_test_file='D:/Abhiraj VIT D/Placement Prep/OOPs Concepts/Haze-Removal-Dark-Channel-Prior/Code/text.txt', overwrite_file_if_already_exists=False):
         # https://stackoverflow.com/questions/4706499/how-do-you-append-to-a-file
         # https://stackoverflow.com/questions/21839803/how-to-append-new-data-onto-a-new-line
         # https://stackoverflow.com/questions/82831/how-do-i-check-whether-a-file-exists-using-python
