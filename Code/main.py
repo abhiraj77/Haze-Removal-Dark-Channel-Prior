@@ -19,7 +19,7 @@ def main():
     images_address = path_dataset + '*.' + imagesType
     list_of_image_addresses = glob.glob(images_address)
     number_of_images_in_dataset = len(list_of_image_addresses)
-    print(f"test: {number_of_images_in_dataset}")
+    print(f"test: {list_of_image_addresses}")
     for image_index in range(number_of_images_in_dataset):
         # ------ https://stackoverflow.com/questions/678236/how-to-get-the-filename-without-the-extension-from-a-path-in-python
         address_of_image = list_of_image_addresses[image_index]
